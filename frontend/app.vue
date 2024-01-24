@@ -37,7 +37,8 @@ const {handleSubmit} = useForm({
 })
 
 const authData = ref<User | null>(null)
-const authSuccessful = ref<boolean>(false)
+const authRegistrationSuccessful = ref<boolean>(false)
+const authDeletionSuccessful = ref<boolean>(false)
 
 const onSubmitRegistration = handleSubmit(async (values) => {
   const {data} = await useFetch<User>('/submit', {
@@ -47,7 +48,7 @@ const onSubmitRegistration = handleSubmit(async (values) => {
   console.log(data.value)
   if (data.value) {
     if (!data.value.ntfy_channel) {
-      authSuccessful.value = false
+      authRegistrationSuccessful.value = false
       toast({
         variant: "destructive",
         title: 'Authentication Error',
@@ -55,10 +56,10 @@ const onSubmitRegistration = handleSubmit(async (values) => {
       });
     } else {
       authData.value = data.value
-      authSuccessful.value = true
+      authRegistrationSuccessful.value = true
     }
   } else {
-    authSuccessful.value = false
+    authRegistrationSuccessful.value = false
     toast({
       variant: "destructive",
       title: 'Authentication Error',
@@ -75,7 +76,7 @@ const onSubmitDeletion = handleSubmit(async (values) => {
   console.log(data.value)
   if (data.value) {
     if (!data.value.ntfy_channel) {
-      authSuccessful.value = false
+      authDeletionSuccessful.value = false
       toast({
         variant: "destructive",
         title: 'Authentication Error',
@@ -83,10 +84,10 @@ const onSubmitDeletion = handleSubmit(async (values) => {
       });
     } else {
       authData.value = data.value
-      authSuccessful.value = true
+      authDeletionSuccessful.value = true
     }
   } else {
-    authSuccessful.value = false
+    authDeletionSuccessful.value = false
     toast({
       variant: "destructive",
       title: 'Authentication Error',
@@ -159,7 +160,7 @@ const onSubmitDeletion = handleSubmit(async (values) => {
             </Button>
           </Form>
         </div>
-          <Card class="shadow-none mt-6" v-auto-animate v-if="authSuccessful">
+          <Card class="shadow-none mt-6" v-auto-animate v-if="authRegistrationSuccessful">
             <CardHeader>
               <CardTitle>Authentication Successful!</CardTitle>
               <CardDescription>Follow the steps below to start receiving messages.</CardDescription>
@@ -219,7 +220,7 @@ const onSubmitDeletion = handleSubmit(async (values) => {
                       3. Wait for the first message
                     </p>
                     <div class="text-sm text-muted-foreground">
-                      You should receive a notification within 3 minutes. Then you're good to go. <br />
+                      You should receive a notification within 6 minutes. Then you're good to go. <br />
                       Note that topic name changes everytime you log in on this website.
                     </div>
                   </div>
@@ -268,7 +269,7 @@ const onSubmitDeletion = handleSubmit(async (values) => {
             </Button>
           </Form>
         </div>
-          <Card class="shadow-none mt-6" v-auto-animate v-if="authSuccessful">
+          <Card class="shadow-none mt-6" v-auto-animate v-if="authDeletionSuccessful">
             <CardHeader>
               <CardTitle>Authentication Successful!</CardTitle>
               <CardDescription>You will no longer receive notifications.</CardDescription>
