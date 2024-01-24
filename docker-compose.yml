@@ -2,8 +2,9 @@ services:
   web:
     build: .
     ports:
-      - "8000:80"
+      - "127.0.0.1:8000:80"
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - NTFY_SECRET=${NTFY_SECRET}
       - TSIMS_URL=${TSIMS_URL}
+    restart: unless-stopped
