@@ -116,7 +116,7 @@ const onSubmitDeletion = handleSubmit(async (values) => {
 
   <div class="max-w-[96ch] px-6 mx-auto mt-6 relative top-16">
     <Tabs default-value="register">
-      <TabsList class="grid grid-cols-2 w-[400px]">
+      <TabsList class="grid grid-cols-2 max-w-[400px]">
         <TabsTrigger value="register">
           Register
         </TabsTrigger>
