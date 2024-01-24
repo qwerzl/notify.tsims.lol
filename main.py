@@ -1,10 +1,10 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi_restful.tasks import repeat_every
 from fastapi.staticfiles import StaticFiles
-from odmantic import AIOEngine, Model, Field
+from odmantic import AIOEngine
 import random
 import nltk
 
@@ -15,7 +15,6 @@ from schemas import User, UserPatchSchema
 
 nltk.download('words')
 word_bank = [word.lower() for word in words.words() if len(word) <= 6]
-
 
 app = FastAPI()
 
@@ -45,9 +44,20 @@ async def submit(username: str, password: str) -> User:
         return existing_user
 
 
-app.mount("/", StaticFiles(directory="frontend/.output/public"), name="static")
+@app.delete("/submit", response_model=User)
+async def delete(username: str, password: str) -> User:
+    await engine.configure_database([User])
+    await login(username, password)
 
-# TODO: Add the option to delete
+    # Check if user with same username exists
+    existing_user = await engine.find_one(User, User.username == username)
+    if existing_user is None:
+        raise HTTPException(404)
+    await engine.delete(existing_user)
+    return existing_user
+
+
+app.mount("/", StaticFiles(directory="frontend/.output/public", html=True), name="static")
 
 
 @app.on_event("startup")
