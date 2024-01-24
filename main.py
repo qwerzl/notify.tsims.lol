@@ -66,8 +66,6 @@ async def cron_job():
     users = await engine.find(User)
     for i in users:
         _data = await check_updates(i)
-
         # Save patch to database
         i.model_update(UserPatchSchema(data=_data))
         await engine.save(i)
-        return i
