@@ -61,7 +61,7 @@ app.mount("/", StaticFiles(directory="frontend/.output/public", html=True), name
 
 
 @app.on_event("startup")
-@repeat_every(seconds=60 * 6)  # 6mins
+@repeat_every(seconds=60 * 5)  # 5mins
 async def cron_job():
     users = await engine.find(User)
     for i in users:
